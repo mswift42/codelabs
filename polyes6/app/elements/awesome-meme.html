@@ -29,5 +29,25 @@
     <div class="bottom">{{bottom}}</div>
   </template>
   <script>
+   class AwesomeMeme {
+     beforeRegister() {
+       this.is = 'awesome-meme';
+       this.properties = {
+         top: {
+           type: String,
+           value: ''
+         },
+         bottom: {
+           type: String,
+           value: ''
+         }
+       };
+     }
+     ready() {
+       this.top = this.top.toUpperCase();
+       this.bottom = this.bottom.toUpperCase();
+     }
+   }
+   Polymer(AwesomMeme);
   </script>
 </dom-module>
