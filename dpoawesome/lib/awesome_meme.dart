@@ -8,9 +8,9 @@ import 'package:web_components/web_components.dart';
 @PolymerRegister('awesome-meme')
 class AwesomeMeme extends PolymerElement {
   @property
-  String top;
+  String top = '';
   String bottom;
 
-
+  AwesomeMeme.created() : super.created();
 }
 
