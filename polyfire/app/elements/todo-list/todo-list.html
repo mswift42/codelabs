@@ -1,0 +1,99 @@
+<!--
+     @license
+     Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+     This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+     The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+     The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+     Code distributed by Google as part of the polymer project is also
+     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+   -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+
+<dom-module id="todo-list">
+  <template>
+    <style>
+     :host {
+       display: block;
+     }
+     form {
+       display: flex;
+       flex-direction: row;
+       align-items: center;
+       margin-bottom: 20px;
+     }
+
+     paper-button {
+       flex-shrink: 1;
+     }
+     paper-input {
+       flex-grow: 1;
+     }
+
+     paper-checkbox {
+       display: inline-block;
+       margin: 5px 0;
+       transition: opacity 0.3s;
+     }
+
+     paper-checkbox[checked] {
+       opacity: 0.5;
+     }
+    </style>
+    <form on-submit="addItem">
+      <paper-input value="{{newItemValue}}"
+                   placeholder="Enter new item here...">
+      </paper-input>
+      <paper-button on-click="addItem">Add</paper-button>
+    </form>
+    <template is="dom-repeat" items="{{items}}">
+      <div>
+        <paper-icon-button icon="delete"
+                           on-click="deleteItem">
+        </paper-icon-button>
+        <paper-checkbox on-change="toggleItem"
+                        checked="{{item.done}}">[[item.text]]</paper-checkbox>
+      </div>
+    </template>
+  </template>
+
+  <script>
+   (function () {
+     'use strict';
+
+     Polymer({
+       is: 'todo-list',
+       properties: {
+       },
+       ready: function() {
+         this.items = [
+           {
+             done: true,
+             text: 'Write a Todo App'
+           },
+           {
+             done: false,
+             text: 'Use Firebase'
+           }
+         ];
+         this.addItem = function(event) {
+           event.preventDefault();
+           this.push('items', {
+             done: false,
+             text: this.newItemValue
+           });
+           this.newItemValue = '';
+         },
+         this.toggleItem = function(event) {
+           event.model.set('done', !event.model.item.done);
+         },
+         this.deleteItem = function(event) {
+           this.splice('items', event.model.index,1);
+         };
+       }
+     });
+   })();
+  </script>
+
+</dom-module>
