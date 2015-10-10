@@ -1,15 +1,19 @@
-<template is="dom-bind" id="app">
-    <form on-submit="addItem">
-        <paper-input value="{{newItemValue}}"
-                     placeholder="Enter your item here..."></paper-input>
-        <paper-button on-click="addItem">Add</paper-button>
-    </form>
-    <template is="dom-repeat" items="{{items}}">
-        <div>
-            <paper-icon-button icon="delete"
-                               on-click="deleteItem"></paper-icon-button>
-            <paper-checkbox on-change="toggleItem"
-                            checked="{{item.done}}">[[item.text]]</paper-checkbox>
-        </div>
+<dom-module id="todo-list">
+    <style>
+    </style>
+    <template>
+        <form on-submit="addItem">
+            <paper-input value="{{newItemValue}}"
+                         placeholder="Enter your item here..."></paper-input>
+            <paper-button on-click="addItem">Add</paper-button>
+        </form>
+        <template is="dom-repeat" items="{{items}}">
+            <div>
+                <paper-icon-button icon="delete"
+                                   on-click="deleteItem"></paper-icon-button>
+                <paper-checkbox on-change="toggleItem"
+                                checked="{{item.done}}">[[item.text]]</paper-checkbox>
+            </div>
+        </template>
     </template>
-</template>
+</dom-module>
