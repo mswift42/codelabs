@@ -2,6 +2,8 @@
 library dpofire.lib.todo_list;
 
 import 'package:polymer_elements/paper_input.dart';
+import 'package:polymer_elements/paper_icon_button.dart';
+import 'package:polymer_elements/paper_checkbox.dart';
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart';
 import 'dart:html';
