@@ -3,6 +3,7 @@
 library my_project.web.index;
 
 import 'package:dpofire/main_app.dart';
+import 'package:dpofire/todo_list.dart';
 import 'package:polymer/polymer.dart';
 
 /// [MainApp] used!

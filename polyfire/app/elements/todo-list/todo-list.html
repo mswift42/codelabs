@@ -10,8 +10,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
-<link rel="import" href="bower_components/firebase-element/firebase-auth.html">
-<link rel="import" href="bower_components/firebase-element/firebase.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-auth.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase.html">
 
 <dom-module id="todo-list">
   <template>
@@ -43,6 +43,14 @@
        opacity: 0.5;
      }
     </style>
+    <firebase-auth
+                auto-login
+                redirect
+                location="[[firebaseURL]]"
+                provider="[[firebaseProvider]]"
+                on-error="onFirebaseError"
+                on-login="onFirebaseLogin"></firebase-auth>
+    <paper-toast id="errorToast"></paper-toast>
     <form on-submit="addItem">
       <paper-input value="{{newItemValue}}"
                    placeholder="Enter new item here...">
@@ -67,31 +75,48 @@
      Polymer({
        is: 'todo-list',
        properties: {
+         ref: {
+           type: Array
+         }
        },
        ready: function() {
-         this.items = [
-           {
-             done: true,
-             text: 'Write a Todo App'
-           },
-           {
-             done: false,
-             text: 'Use Firebase'
-           }
-         ];
+         this.firebaseUrl = 'https://polyfire42.firebaseio.com/';
+         this.firebaseProvider = 'anonymous';
+         
+         this.onFirebaseLogin = function(event) {
+           this.ref = new Firebase(this.FirebaseUrl = '/user/' +
+                                                      event.detail.user.uid);
+           this.ref.on('value', function(snapshot) {
+             this.updateItems(snapshot);
+           });
+         },
+         this.items = [];
          this.addItem = function(event) {
            event.preventDefault();
-           this.push('items', {
+           this.ref.push('items', {
              done: false,
              text: this.newItemValue
            });
            this.newItemValue = '';
          },
+         this.updateItems = function(snapshot) {
+           this.items = [];
+           snapshot.forEach(function(childSnapshot) {
+             var item = childSnapshot.val();
+             item.uid = childSnapshot.key();
+             this.push('items', item);
+           });
+         },
          this.toggleItem = function(event) {
-           event.model.set('done', !event.model.item.done);
+           this.ref.child(event.model.item.uid).
+                update({done: event.mode.item.done});
          },
          this.deleteItem = function(event) {
-           this.splice('items', event.model.index,1);
+           this.ref.child(event.model.item.uid).remove();
+         },
+         this.onFirebaseError = function(event) {
+           this.$.errorToast.text = event.detail.message;
+           this.$.errorToast.show();
          };
        }
      });
