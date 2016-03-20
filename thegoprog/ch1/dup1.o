@@ -1,0 +1,19 @@
+<div *ngIf="scheduled != null" class="scheduled" (click)="toggleEditing()">
+  <div class="scheduledicon">
+    <i class="fa fa-clock-o"></i>
+  </div>
+</div>
+<div *ngIf="scheduled != null && !editing" class="scheduled">
+  <div class="scheduleddate">
+    <span>{{scheduled}}</span>
+  </div>
+</div>
+<div *ngIf="editing" class="scheduled editdate">
+  <div class="dateinput">
+    <input type="string" [(ngModel)]="scheduled"
+           (change)="editScheduled($event)" />
+  </div>
+</div>
+<div *ngIf="dateinvalid" class="alert alert-warning">
+  <strong>Warning!</strong> Date must be entered in format dd/mm/yyyy
+</div>
